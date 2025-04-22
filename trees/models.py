@@ -30,7 +30,7 @@ class TreeNames(models.Model):
         return True
 
 class Taxonomy(models.Model):
-    tree = models.ForeignKey(Tree, on_delete=models.CASCADE, related_name='taxonomy')
+    tree = models.OneToOneField(Tree, on_delete=models.CASCADE, related_name='taxonomy')
     family = models.TextField()
     genus = models.TextField()
     species = models.TextField()
