@@ -1,9 +1,9 @@
 from django.db import models
+import json
 
 class Tree(models.Model):
     description = models.TextField()
-    benefits = models.TextField()
-    status = models.TextField()
+    uses = models.TextField()
     qrCode = models.CharField(max_length=100, unique=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
@@ -15,16 +15,20 @@ class Tree(models.Model):
 
 class TreeNames(models.Model):
     tree = models.OneToOneField(Tree, on_delete=models.CASCADE, related_name='names')
-    name = models.CharField(max_length=100)
+    otherNames = models.TextField(blank=True)
     nativeName = models.CharField(max_length=100)
     scientificName = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.name
-    
+        return self.scientificName
+
+    def set_other_names(self, names_list):
+        self.otherNames = json.dumps(names_list)
+
+    def get_other_names(self):
+        return json.loads(self.otherNames or "[]")
+
     def validate(self):
-        # Implement validation logic here
-        # For example, ensure scientific name follows binomial nomenclature
         if not self.scientificName or ' ' not in self.scientificName:
             return False
         return True
@@ -38,14 +42,16 @@ class Taxonomy(models.Model):
     def __str__(self):
         return f"{self.family} - {self.genus} - {self.species}"
     
-class EcologyHabitat(models.Model):
+class EcologicalBackground(models.Model):
     tree = models.OneToOneField(Tree, on_delete=models.CASCADE, related_name='ecology')
-    habitat = models.TextField()
-    location = models.TextField()
+    habitatType = models.TextField()
+    nativeLocation = models.TextField()
+    system = models.TextField()
     climate = models.TextField()
+    endemicity = models.TextField()
     
     def __str__(self):
-        return f"Ecology for {self.tree}"
+        return f"Ecological background for {self.tree}"
     
 class TreePhoto(models.Model):
     """Model for storing multiple photos per tree"""

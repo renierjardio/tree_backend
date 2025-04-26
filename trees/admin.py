@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tree, TreeNames, Taxonomy, EcologyHabitat, TreePhoto, TreeModel
+from .models import Tree, TreeNames, Taxonomy, EcologicalBackground, TreePhoto, TreeModel
 
 class TreeNamesInline(admin.StackedInline):
     model = TreeNames
@@ -7,8 +7,8 @@ class TreeNamesInline(admin.StackedInline):
 class TaxonomyInline(admin.StackedInline):
     model = Taxonomy
 
-class EcologyHabitatInline(admin.StackedInline):
-    model = EcologyHabitat
+class EcologicalBackgroundInline(admin.StackedInline):
+    model = EcologicalBackground
 
 class TreePhotoInline(admin.TabularInline):
     model = TreePhoto
@@ -20,34 +20,34 @@ class TreeModelInline(admin.TabularInline):
 
 @admin.register(Tree)
 class TreeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_name', 'status', 'qrCode')
-    search_fields = ('qrCode', 'names__name', 'names__scientificName')
-    inlines = [TreeNamesInline, TaxonomyInline, EcologyHabitatInline, 
+    list_display = ('id', 'get_name', 'qrCode')
+    search_fields = ('qrCode', 'names__nativeName', 'names__scientificName')
+    inlines = [TreeNamesInline, TaxonomyInline, EcologicalBackgroundInline, 
                TreePhotoInline, TreeModelInline]
-    
+
     def get_name(self, obj):
         if hasattr(obj, 'names'):
-            return obj.names.name
+            return obj.names.nativeName
         return "-"
-    get_name.short_description = 'Name'
+    get_name.short_description = 'Native Name'
 
 @admin.register(TreePhoto)
 class TreePhotoAdmin(admin.ModelAdmin):
     list_display = ('id', 'get_tree_name', 'caption', 'isPrimary')
     list_filter = ('isPrimary',)
-    
+
     def get_tree_name(self, obj):
         if hasattr(obj.tree, 'names'):
-            return obj.tree.names.name
+            return obj.tree.names.nativeName
         return f"Tree #{obj.tree.id}"
     get_tree_name.short_description = 'Tree'
 
 @admin.register(TreeModel)
 class TreeModelAdmin(admin.ModelAdmin):
     list_display = ('id', 'get_tree_name', 'fileFormat')
-    
+
     def get_tree_name(self, obj):
         if hasattr(obj.tree, 'names'):
-            return obj.tree.names.name
+            return obj.tree.names.nativeName
         return f"Tree #{obj.tree.id}"
     get_tree_name.short_description = 'Tree'
