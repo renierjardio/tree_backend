@@ -10,7 +10,7 @@ class Tree(models.Model):
 
     def __str__(self):
         if hasattr(self, 'names'):
-            return f"{self.names.name} ({self.names.scientificName})"
+            return f"{self.names.nativeName} ({self.names.scientificName})"
         return f"Tree #{self.id}"
 
 class TreeNames(models.Model):
