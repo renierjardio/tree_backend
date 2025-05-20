@@ -7,5 +7,5 @@ router.register(r'trees', views.TreeViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('trees/<str:qrCode>/', views.getTreeByQr, name='tree-by-qr'),
+    path('trees/qr/<str:qrCode>/', views.getTreeByQr, name='tree-by-qr'),
 ]

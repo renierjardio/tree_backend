@@ -26,7 +26,12 @@ class TreeNames(models.Model):
         self.otherNames = json.dumps(names_list)
 
     def get_other_names(self):
-        return json.loads(self.otherNames or "[]")
+        if not self.otherNames:
+            return []
+        try:
+            return json.loads(self.otherNames)
+        except json.JSONDecodeError:
+            return []  # Or handle this differently if you want to log/report it
 
     def validate(self):
         if not self.scientificName or ' ' not in self.scientificName:
