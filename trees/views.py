@@ -10,6 +10,7 @@ class TreeViewSet(viewsets.ModelViewSet):
     """
     queryset = Tree.objects.all()
     serializer_class = TreeSerializer
+    lookup_field = 'qrCode'
 
 @api_view(['GET'])
 def getTreeByQr(request, qrCode):
