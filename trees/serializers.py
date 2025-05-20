@@ -34,5 +34,6 @@ class TreeSerializer(serializers.ModelSerializer):
 
     def get_otherNames(self, obj):
         if hasattr(obj.names, 'get_other_names'):
-            return obj.names.get_other_names()
-        return []
+            names = obj.names.get_other_names()
+            return ', '.join(names)  # or json.dumps(names) if needed
+        return ''
