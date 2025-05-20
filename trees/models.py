@@ -25,8 +25,10 @@ class TreeNames(models.Model):
     def set_other_names(self, names_list):
         self.otherNames = json.dumps(names_list)
 
-    def get_other_names(self, obj):
-        return obj.names.otherNames if hasattr(obj, 'names') else ""
+    def get_other_names(self):
+        if self.otherNames:
+            return json.loads(self.otherNames)
+        return []
 
     def validate(self):
         if not self.scientificName or ' ' not in self.scientificName:

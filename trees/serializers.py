@@ -4,7 +4,7 @@ from .models import Tree
 class TreeSerializer(serializers.ModelSerializer):
     nativeName = serializers.CharField(source='names.nativeName', read_only=True)
     scientificName = serializers.CharField(source='names.scientificName', read_only=True)
-    otherNames = serializers.SerializerMethodField()
+    otherNames = serializers.CharField(source='names.otherNames', read_only=True)
 
     family = serializers.CharField(source='taxonomy.family', read_only=True)
     genus = serializers.CharField(source='taxonomy.genus', read_only=True)
@@ -31,8 +31,3 @@ class TreeSerializer(serializers.ModelSerializer):
             'endemicity',
             'uses',
         ]
-
-    def get_otherNames(self, obj):
-        if hasattr(obj.names, 'get_other_names'):
-            return obj.names.get_other_names()
-        return []
